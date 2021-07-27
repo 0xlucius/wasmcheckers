@@ -1,19 +1,11 @@
 (module
     (memory $mem 1)
 
-    ;; Game State Globals
+    
     (global $WHITE i32 (i32.const 2))
     (global $BLACK i32 (i32.const 1))
     (global $CROWN i32 (i32.const 4))
 
-    ;; game state meaning in bits
-    ;; Binary Value                   Decimal Value    Game Meaning
-    ;; [unused 24 bits]...00000000       0          Unoccupied Square
-    ;; [unused 24 bits]...00000001       1           Black Piece
-    ;; [unused 24 bits]...00000010       2           White Piece
-    ;; [unused 24 bits]...00000100       4           Crowned Piece
-
-    ;; Determine the byte offset for a given X and Y cartesian coordinate
     (func $indexForPosition (param $x i32) (param $y i32) (result i32)
         (i32.add
             (i32.mul
@@ -41,7 +33,7 @@
         )
     )
 
-    ;; Determine if a piece is black
+    ;; Define if a piece is black
     (func $isBlack (param $piece i32) (result i32)
         (i32.eq
             (i32.and (get_local $piece) (get_global $BLACK))
@@ -66,4 +58,11 @@
     (func $withoutCrown (param $piece i32) (result i32)
         (i32.and (get_local $piece) (i32.const 3))
     )
+
+    (export "offsetForPosition" (func $offsetForPosition))
+    (export "isCrowned" (func $isCrowned))
+    (export "isWhite" (func $isWhite))
+    (export "isBlack" (func $isBlack))
+    (export "withCrown" (func $withCrown))
+    (export "withoutCrown" (func $withoutCrown))
 )
